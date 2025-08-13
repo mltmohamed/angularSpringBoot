@@ -4,6 +4,7 @@ import com.moh.angularSpring.dao.AuthorDao;
 import com.moh.angularSpring.dto.AuthorDto;
 import com.moh.angularSpring.dto.BookDto;
 import com.moh.angularSpring.model.Author;
+import com.moh.angularSpring.model.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,10 +32,10 @@ public class AuthorService {
         Author author = authorDao.findById(id)
                 .orElseThrow(()-> new RuntimeException("Author non trouvé"));
         AuthorDto authorDto = new AuthorDto();
-        return new AuthorDto(
-                author.getName(),
-                author.getAddress(),
-                author.getBooks());
+        authorDto.setName(author.getName());
+        authorDto.setAddress(author.getAddress());
+        authorDto.setBooks(author.getBooks());
+        return authorDto;
     }
     // method for get all authors
     public List<AuthorDto> getAllAuthors() {
@@ -54,5 +55,19 @@ public class AuthorService {
                         book.getTitle(),
                         book.getContent()
                 )).collect(Collectors.toList());
+    }
+    // method for create book
+    public void createBookForAuthor(Long authorId, BookDto bookDto) {
+        Author author = authorDao.findById(authorId)
+                .orElseThrow(() -> new RuntimeException("Author not found"));
+        // Create a new book and set its properties
+        Book book = new Book();
+        book.setTitle(bookDto.getTitle());
+        book.setContent(bookDto.getContent());
+        book.setAuthor(author); // Set the author for the book
+        // Add the book to the author's list of books
+        author.getBooks().add(book);
+        // Save the updated author
+        authorDao.save(author);
     }
 }

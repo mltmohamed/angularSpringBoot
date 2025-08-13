@@ -1,8 +1,7 @@
 package com.moh.angularSpring.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +9,7 @@ import lombok.Setter;
 
 @Entity @Setter @Getter @AllArgsConstructor @NoArgsConstructor
 public class Book {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
     private String content;
@@ -17,5 +17,6 @@ public class Book {
     // relation with author
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = false)
+    @JsonBackReference
     private Author author;
 }

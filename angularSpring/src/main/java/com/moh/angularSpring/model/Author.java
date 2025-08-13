@@ -1,5 +1,6 @@
 package com.moh.angularSpring.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,5 +20,6 @@ public class Author {
     private String address;
     // relation with book
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     List<Book> books = new ArrayList<>();
 }
